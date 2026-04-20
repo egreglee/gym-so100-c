@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import numpy as np
+import threed_fk as d3
 
 def get_transform(theta, d, a, alpha):
     """Standard DH Matrix: Handles axis swaps and sign changes automatically."""
@@ -37,7 +38,7 @@ def forward_kinematics_v3(joint_angles):
         a, d, alpha, q_off = dh_params[i]
         T = T @ get_transform(q + q_off, d, a, alpha)
         with np.printoptions(precision=5):
-            # print(f"{T}")
+            print(f"{T}")
             pass
     return T
 
@@ -118,6 +119,11 @@ def main():
     print(f"Planar Prediction v3: {planar_fk_v3(zeros, True)}")
     wristup = np.array([-6.57574296e-11, -2.27688006e-01, -3.80616735e-07,  1.44596769e-06, 0, 0])
     print(f"Planar Prediction v3: {planar_fk_v3(wristup, True)} @ {wristup}")
+
+    print(f"--------------------")
+    zeros = np.zeros((6,))
+    print(f"threed_fk: {d3.threed_fk(zeros, True)}")
+    print(f"threed_fk: {d3.threed_fk(wristup, True)} @ {wristup}")
 
 if __name__ == "__main__":
     main()
