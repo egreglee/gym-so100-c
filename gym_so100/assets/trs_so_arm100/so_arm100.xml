@@ -69,11 +69,13 @@
       <geom type="mesh" mesh="Base" class="visual" />
       <geom type="mesh" mesh="Base_Motor" class="motor_visual" />
       <geom type="mesh" mesh="Base" class="collision" />
+      <site name="base_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
       <body name="Rotation_Pitch" pos="0 -0.0452 0.0165" quat="0.707105 0.707108 0 0">
         <inertial pos="-9.07886e-05 0.0590972 0.031089" quat="0.363978 0.441169 -0.623108 0.533504"
           mass="0.119226"
           diaginertia="5.94278e-05 5.89975e-05 3.13712e-05" />
         <joint name="Rotation" class="Rotation" />
+        <site name="rotation_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
         <geom type="mesh" mesh="Rotation_Pitch" class="visual" />
         <geom type="mesh" mesh="Rotation_Pitch_Motor" class="motor_visual" />
         <geom type="mesh" mesh="Rotation_Pitch" class="collision" />
@@ -82,6 +84,7 @@
             quat="0.50104 0.498994 -0.493562 0.50632" mass="0.162409"
             diaginertia="0.000213312 0.000167164 7.01522e-05" />
           <joint name="Pitch" class="Pitch" />
+          <site name="pitch_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
           <geom type="mesh" mesh="Upper_Arm" class="visual" />
           <geom type="mesh" mesh="Upper_Arm_Motor" class="motor_visual" />
           <geom type="mesh" mesh="Upper_Arm" class="collision" />
@@ -90,6 +93,7 @@
               quat="0.701995 0.0787996 0.0645626 0.704859"
               mass="0.147968" diaginertia="0.000138803 0.000107748 4.84242e-05" />
             <joint name="Elbow" class="Elbow" />
+            <site name="elbow_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
             <geom type="mesh" mesh="Lower_Arm" class="visual" />
             <geom type="mesh" mesh="Lower_Arm_Motor" class="motor_visual" />
             <geom type="mesh" mesh="Lower_Arm" class="collision" />
@@ -98,6 +102,7 @@
                 quat="-0.0522806 0.705235 0.0549524 0.704905"
                 mass="0.0661321" diaginertia="3.45403e-05 2.39041e-05 1.94704e-05" />
               <joint name="Wrist_Pitch" class="Wrist_Pitch" />
+              <site name="wrist_pitch_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
               <geom type="mesh" mesh="Wrist_Pitch_Roll" class="visual" />
               <geom type="mesh" mesh="Wrist_Pitch_Roll_Motor" class="motor_visual" />
               <geom type="mesh" mesh="Wrist_Pitch_Roll" class="collision" />
@@ -106,6 +111,15 @@
                   quat="0.41836 0.620891 -0.350644 0.562599"
                   mass="0.0929859" diaginertia="5.03136e-05 4.64098e-05 2.72961e-05" />
                 <joint name="Wrist_Roll" class="Wrist_Roll" />
+                <site name="wrist_roll_site" type="sphere" pos="0 0 0" size="0.01" rgba="1 0 0 1" />
+		<!-- y is - world x; z is world y -->
+                <site name="jaw_target_site" type="sphere" pos="0 -0.10125 0" size="0.001" rgba="1 1 0 1" />
+                <site name="fixed_jaw_site" type="sphere" pos="0.0075 -0.10125 0" size="0.001" rgba="1 0 0 1" />
+                <!--
+                <site name="x-axis_pointer" type="box" pos="0.1 0 0" size="0.1 0.005 0.005" rgba="1 0 0 1" />
+                <site name="y-axis_pointer" type="box" pos="0 0.1 0" size="0.005 0.1 0.005" rgba="0 1 0 1" />
+                <site name="z-axis_pointer" type="box" pos="0 0 0.1" size="0.005 0.005 0.1" rgba="0 0 1 1" />
+                -->
                 <geom type="mesh" mesh="Fixed_Jaw" class="visual" />
                 <geom type="mesh" mesh="Fixed_Jaw_Motor" class="motor_visual" />
                 <geom type="mesh" mesh="Fixed_Jaw_Collision_1" class="collision" />
@@ -131,7 +145,17 @@
                     quat="0.696562 0.716737 -0.0239844 -0.0227026"
                     mass="0.0202444" diaginertia="1.11265e-05 8.99651e-06 2.99548e-06" />
                   <joint name="Jaw" class="Jaw" />
-
+                  <site name="jaw_site" type="sphere" pos="0 0 0" size="0.001" rgba="1 0 0 1" />
+		  <!-- y-axis is x towards wrist -0.05 -0.075 -0.080 -0.075 -0.070- -0.085 -.075 -->
+                  <!-- -0.0745 -0.07475 -.075 -0.0760 || -0.0775 -0.080 -->
+		  <!-- x-axis is opening/closing direction 0.0075 0.0025 0.00 -0.02 -0.015 -->
+                  <!--  -0.1 -0.025 | -0.008 -0.010 -0.012 further from centerline -->
+                  <site name="moving_jaw_site" type="sphere" pos="-0.0125 -0.0765 0" size="0.001" rgba="0 1 0 1" />
+                  <!--
+		  <site name="x-axis_pointer" type="box" pos="0.1 0 0" size="0.1 0.005 0.005" rgba="1 0 0 1" />
+		  <site name="y-axis_pointer" type="box" pos="0 0.1 0" size="0.005 0.1 0.005" rgba="0 1 0 1" />
+		  <site name="z-axis_pointer" type="box" pos="0 0 0.1" size="0.005 0.005 0.1" rgba="0 0 1 1" />
+                  -->
                   <geom type="mesh" mesh="Moving_Jaw" class="visual" />
                   <geom type="mesh" mesh="Moving_Jaw_Collision_1" class="collision" />
                   <geom type="mesh" mesh="Moving_Jaw_Collision_2" class="collision" />

@@ -100,7 +100,26 @@ class SO100Task(base.Task):
             width=self.observation_width,
             camera_id="front_close",
         )
-
+        obs["images"]["left_pillar"] = physics.render(
+            height=self.observation_height,
+            width=self.observation_width,
+            camera_id="left_pillar",
+        )
+        obs["images"]["right_pillar"] = physics.render(
+            height=self.observation_height,
+            width=self.observation_width,
+            camera_id="right_pillar",
+        )
+        obs["images"]["cam_a"] = physics.render(
+            height=self.observation_height,
+            width=self.observation_width,
+            camera_id="cam_a",
+        )
+        obs["images"]["cam_b"] = physics.render(
+            height=self.observation_height,
+            width=self.observation_width,
+            camera_id="cam_b",
+        )
         self._precompute_bin_aabb(physics)
         id_cube_site = physics.model.site("cube_site").id
         cube_pos = physics.data.site_xpos[id_cube_site]

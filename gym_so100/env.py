@@ -3,7 +3,7 @@ import numpy as np
 from dm_control import mujoco
 from dm_control.rl import control
 from gymnasium import spaces
-import gym as old_gym
+#import gym as old_gym
 
 from gym_so100.constants import (
     SO100_ACTIONS,
@@ -56,6 +56,12 @@ class SO100Env(gym.Env):
                         shape=(self.observation_height, self.observation_width, 3),
                         dtype=np.uint8,
                     ),
+                    "pixels2": spaces.Box(
+                        low=0,
+                        high=255,
+                        shape=(self.observation_height, self.observation_width, 3),
+                        dtype=np.uint8,
+                    ),
                     "agent_pos": spaces.Box(
                         low=-10.0,
                         high=10.0,
@@ -86,7 +92,7 @@ class SO100Env(gym.Env):
             if visualize
             else (self.observation_width, self.observation_height)
         )
-        image = self._env.physics.render(height=height, width=width, camera_id="top")
+        image = self._env.physics.render(height=height, width=width, camera_id="cam_a")
         return image
 
     def _make_env_task(self, task_name):
@@ -129,10 +135,12 @@ class SO100Env(gym.Env):
 
     def _format_raw_obs(self, raw_obs):
         if self.obs_type == "so100_pixels_agent_pos":
-            rgb = raw_obs["images"]["top"].copy()
+            rgb = raw_obs["images"]["cam_a"].copy()
+            rgb2 = raw_obs["images"]["cam_b"].copy()
             obs = {
                 "pixels": rgb,
-                "agent_pos": raw_obs["qpos"].astype(np.float32),  # SO100 uses float32,
+                "pixels2": rgb2,
+                "agent_pos": raw_obs["qpos"].astype(np.float32),
             }
         elif self.obs_type == "so100_state":
             obs = np.concatenate(
