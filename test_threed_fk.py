@@ -6,28 +6,28 @@ import threed_fk as d3
 class TestThreedFk(unittest.TestCase):
     def test_zero(self):
         zeros = np.zeros((6,))
-        want = [0.01562, 0.50000017, 0.0962]
+        want = [0.02027, 0.5, 0.1039]
         got = d3.threed_fk(zeros, False)
-        got_jt = got['jaw_grasp']
+        got_mjg = got['moving_jaw_grasp']
         for i, w in enumerate(want):
-            self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
+            self.assertAlmostEqual(got_mjg[i], w, delta=5e-7)
 
     def test_wristup(self):
         wristup = [-6.57574296e-11, -2.27688006e-01, -3.80616735e-07,  1.44596769e-06, 0, 0]
-        want = [0.01021529, 0.50000017, 0.18906955]
+        want = [0.0130072, 0.50000000, 0.19762045]
         got = d3.threed_fk(wristup, False)
-        got_jt = got['jaw_grasp']
+        got_mjg = got['moving_jaw_grasp']
         for i, w in enumerate(want):
-            self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
+            self.assertAlmostEqual(got_mjg[i], w, delta=5e-7)
 
     def test_general(self):
         # especially non-zero rotation
         general = [ 1.6704086,  -0.72340645,  0.69616856, -1.09520214,  1.59030296, -0.15477658]
-        want =  [-0.4574295,   0.83648659,  0.32680155]
+        want =  [-0.4528063,   0.837627192,  0.32841733]
         got = d3.threed_fk(general, False)
-        got_jt = got['jaw_grasp']
+        got_mjg = got['moving_jaw_grasp']
         for i, w in enumerate(want):
-            self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
+            self.assertAlmostEqual(got_mjg[i], w, delta=5e-7)
         
     def test_rotx(self):
         xyz = np.array([1,2,3])
