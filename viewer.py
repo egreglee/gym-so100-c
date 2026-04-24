@@ -38,6 +38,7 @@ def main():
                 settled = False
             else:
                 if not settled:
+                    print("---------------------------------------------------------------")
                     # up until now the sim hadn't settled, so evaluate this state.
                     sites = ["base", "rotation", "pitch", "elbow", "wrist_pitch", "wrist_roll", "jaw", "moving_jaw_grasp", "fixed_jaw_grasp", "jaw_grasp"]
                     sites_xpos = {}
@@ -52,7 +53,7 @@ def main():
                     print(f"qpos rot: {qpos[0]:.4g}, pitch {qpos[1]:.4g}, elbow {qpos[2]:.4g}, wrist_pitch {qpos[3]:.4g}, wrist_roll {qpos[4]:.4g}, jaw {qpos[5]:.4g} ({qpos})")
                     all_fk = d3.threed_fk(qpos, False)
                     fkw = all_fk[watch]
-                    print(f"planar:           {fkw} @ {qpos[:6]}")
+                    print(f"planar @{watch}: {fkw} @ qpos {qpos[:6]}")
                     for k, v in all_fk.items():
                         fom = 0
                         emphasis = ""

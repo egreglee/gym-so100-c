@@ -51,68 +51,68 @@ def threed_fk(q, verbose):
     # relative to body MOVING_JAW (joint JAW) 
     moving_jaw_grasp_site = [-0.0125, -0.0815, 0]
     # relative to body FIXED_JAW (joint WRIST_ROLL)
-    jaw_grasp_site = [0, -0.10250, 0]
+    jaw_grasp_site = [np.nan, -0.10250, np.nan]
     fixed_jaw_grasp_site =  [0.0075, -0.10250, 0]
 
-    joint = 'base'
+    location = 'base'
     xyz = base
     xyz_prev = xyz.copy()
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     
-    joint = "rotate"
+    location = "rotate"
     xyz += [L_rotate, 0, O_rotate]
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     
-    joint = "pitch"
+    location = "pitch"
     xyz += rotz(q[0], [L_pitch, 0, O_pitch])
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     
-    joint = "elbow"
+    location = "elbow"
     delta = rotz(q[0], roty(q[1], [L_elbow, 0, O_elbow]))
     xyz_prev = xyz.copy()
     xyz += delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
 
-    joint = "wrist_pitch"
+    location = "wrist_pitch"
     delta = rotz(q[0], roty(q[1] + q[2], [L_wrist_pitch, 0, O_wrist_pitch]))
     xyz_prev = xyz.copy()
     xyz += delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     
-    joint = "wrist_roll"
+    location = "wrist_roll"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_wrist_roll, 0, O_wrist_roll]))
     xyz_prev = xyz.copy()
     xyz += delta
     if verbose :
-        print(f"{joint:16}  {xyz} = {xyz_prev} + {delta}")
-    ret[joint] = xyz.copy()
+        print(f"{location:16}  {xyz} = {xyz_prev} + {delta}")
+    ret[location] = xyz.copy()
 
     xyz_wrist_roll = xyz.copy()
     
-    joint = "jaw"
+    location = "jaw"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-jaw_site[1], jaw_site[2], -jaw_site[0]])))
     xyz = xyz_wrist_roll + delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     xyz_jaw = xyz.copy()
     if verbose :
-        print(f"{joint:16}  {xyz}")
+        print(f"{location:16}  {xyz}")
 
-    joint = "moving_jaw_grasp"
+    location = "moving_jaw_grasp"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], roty(-q[5], [-moving_jaw_grasp_site[1], moving_jaw_grasp_site[2], moving_jaw_grasp_site[0]]))))
     xyz = xyz_jaw + delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
     if verbose :
-        print(f"{joint:16}  {xyz} = {xyz_jaw} + {delta}")
+        print(f"{location:16}  {xyz} = {xyz_jaw} + {delta}")
 
-    joint = "fixed_jaw_grasp"
+    location = "fixed_jaw_grasp"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-fixed_jaw_grasp_site[1], fixed_jaw_grasp_site[2], -fixed_jaw_grasp_site[0]])))
     xyz = xyz_wrist_roll + delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
 
-    joint = "jaw_grasp"
-    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_grasp, 0, O_jaw_grasp]))
+    location = "jaw_grasp"
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [-jaw_grasp_site[1], 0, 0]))
     xyz = xyz_wrist_roll + delta
-    ret[joint] = xyz.copy()
+    ret[location] = xyz.copy()
 
     return ret
 
