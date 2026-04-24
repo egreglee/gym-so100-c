@@ -19,6 +19,15 @@ class TestThreedFk(unittest.TestCase):
         for i, w in enumerate(want):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
 
+    def test_general(self):
+        # especially non-zero rotation
+        general = [ 1.6704086,  -0.72340645,  0.69616856, -1.09520214,  1.59030296, -0.15477658]
+        want =  [-0.4574295,   0.83648659,  0.32680155]
+        got = d3.threed_fk(general, False)
+        got_jt = got['jaw_target']
+        for i, w in enumerate(want):
+            self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
+        
     def test_roty(self):
         xyz = np.array([1,2,3])
         q = np.pi/2
@@ -38,7 +47,7 @@ class TestThreedFk(unittest.TestCase):
     def test_rotz(self):
         xyz = np.array([1,2,3])
         q = np.pi/2
-        want = np.array([2.0, -1.0, 3.0])
+        want = np.array([-2.0, 1.0, 3.0])
         got = d3.rotz(q, xyz)
         for i in range(len(got)):
             self.assertAlmostEqual(got[i], want[i], delta=5e-7)
@@ -46,7 +55,7 @@ class TestThreedFk(unittest.TestCase):
     def test_rotz_pi4(self):
         xyz = np.array([1,2,3])
         q = np.pi/4
-        want = np.array([2.12132034, 0.70710678, 3.])
+        want = np.array([-0.70710678, 2.12132034, 3.])
         got = d3.rotz(q, xyz)
         for i in range(len(got)):
             self.assertAlmostEqual(got[i], want[i], delta=5e-7)

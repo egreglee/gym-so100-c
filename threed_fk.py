@@ -16,8 +16,8 @@ def roty(q, xyz):
 def rotz(q, xyz):
     (c, s) = np.cos(q), np.sin(q)
     rot = np.array([
-        [c, s, 0],
-        [-s, c, 0],
+        [c, -s, 0],
+        [s, c, 0],
         [0, 0, 1]])
     return rot @ xyz
 
