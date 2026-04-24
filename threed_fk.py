@@ -65,24 +65,18 @@ def threed_fk(q, verbose):
     
     joint = "pitch"
     xyz += rotz(q[0], [L_pitch, 0, O_pitch])
-    if verbose:
-        print(f"{joint:11} {xyz} = {xyz_q0}")
     ret[joint] = xyz.copy()
     
     joint = "elbow"
     delta = rotz(q[0], roty(q[1], [L_elbow, 0, O_elbow]))
     xyz_prev = xyz.copy()
     xyz += delta
-    if verbose :
-        print(f"{joint:11} {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
 
     joint = "wrist_pitch"
     delta = rotz(q[0], roty(q[1] + q[2], [L_wrist_pitch, 0, O_wrist_pitch]))
     xyz_prev = xyz.copy()
     xyz += delta
-    if verbose :
-        print(f"{joint:11} {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
     
     joint = "wrist_roll"
@@ -90,7 +84,7 @@ def threed_fk(q, verbose):
     xyz_prev = xyz.copy()
     xyz += delta
     if verbose :
-        print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
+        print(f"{joint:16}  {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
 
     xyz_wrist_roll = xyz.copy()
@@ -99,19 +93,25 @@ def threed_fk(q, verbose):
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-jaw_site[1], jaw_site[2], -jaw_site[0]])))
     xyz = xyz_wrist_roll + delta
     ret[joint] = xyz.copy()
+    xyz_jaw = xyz.copy()
+    if verbose :
+        print(f"{joint:16}  {xyz}")
+
+    joint = "moving_jaw_grasp"
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], roty(-q[5], [-moving_jaw_grasp_site[1], moving_jaw_grasp_site[2], moving_jaw_grasp_site[0]]))))
+    xyz = xyz_jaw + delta
+    ret[joint] = xyz.copy()
+    if verbose :
+        print(f"{joint:16}  {xyz} = {xyz_jaw} + {delta}")
 
     joint = "fixed_jaw_grasp"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-fixed_jaw_grasp_site[1], fixed_jaw_grasp_site[2], -fixed_jaw_grasp_site[0]])))
     xyz = xyz_wrist_roll + delta
-    if verbose :
-        print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
 
     joint = "jaw_grasp"
     delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_grasp, 0, O_jaw_grasp]))
     xyz = xyz_wrist_roll + delta
-    if verbose :
-        print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
 
     return ret
