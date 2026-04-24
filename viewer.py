@@ -5,7 +5,7 @@ import mujoco.viewer
 import dh
 import threed_fk as d3
 
-watchable = ["jaw_target", "fixed_jaw"]
+watchable = ["jaw_grasp", "fixed_jaw_grasp"]
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--zero-g", action="store_true", help="simulate with no gravity")
@@ -17,7 +17,7 @@ def main():
     if args.zero_g:
         model.opt.gravity[:] = 0
 
-    watch_site = "jaw_target" if args.site is None else args.site
+    watch_site = "jaw_grasp" if args.site is None else args.site
 
     with mujoco.viewer.launch_passive(model, data) as viewer:
         site_prev = np.zeros((3,))
@@ -28,7 +28,7 @@ def main():
 
             # monitor jaw target
             site_world_pos = data.site(watch_site + "_site").xpos
-            fj_site_world_pos = data.site("fixed_jaw" + "_site").xpos
+            fj_site_world_pos = data.site("fixed_jaw_grasp" + "_site").xpos
 
             # on startup or after a control action in the viewer, allclose should be false.
             # when the simulation as settled down, i.e. the targeted site stops moving,
@@ -40,15 +40,16 @@ def main():
                 if not settled:
                     # up until now the sim hadn't settled, so evaluate this state.
                     print(f"{watch_site}: {site_world_pos}")
-                    for n in ["base", "rotation", "pitch", "elbow", "wrist_pitch", "fixed_jaw", "jaw_target"]:
+                    for n in ["base", "rotation", "pitch", "elbow", "wrist_pitch", "wrist_roll", "jaw", "moving_jaw_grasp", "fixed_jaw_grasp", "jaw_grasp"]:
                         n_ = n + "_site"
                         swp = data.site(n_).xpos
-                        print(f"{n_:16}: {swp}")
+                        print(f"{n_:22}: {swp}")
 
                     # check forward kinetics models
                     qpos = data.qpos.copy()
+                    print(f"qpos {qpos}")
                     all = d3.threed_fk(qpos, False)
-                    pfw = all['jaw_target']
+                    pfw = all['jaw_grasp']
                     print(f"planar:           {pfw} @ {qpos[:6]}")
                     with np.printoptions(precision=2):
                         diff = pfw - site_world_pos
@@ -58,7 +59,7 @@ def main():
                         print(f"{k:16}: {v}")
 
                     qzero = np.zeros((6,))
-                    pfw_zero = d3.threed_fk(qzero, False)['jaw_target']
+                    pfw_zero = d3.threed_fk(qzero, False)['jaw_grasp']
                     print(f"planar zero {pfw_zero} @ {qzero[:4]}")
                 settled = True
 

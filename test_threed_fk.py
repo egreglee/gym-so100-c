@@ -7,7 +7,7 @@ class TestThreedFk(unittest.TestCase):
         zeros = np.zeros((6,))
         want = [0.01562, 0.50000017, 0.0962]
         got = d3.threed_fk(zeros, False)
-        got_jt = got['jaw_target']
+        got_jt = got['jaw_grasp']
         for i, w in enumerate(want):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
 
@@ -15,7 +15,7 @@ class TestThreedFk(unittest.TestCase):
         wristup = [-6.57574296e-11, -2.27688006e-01, -3.80616735e-07,  1.44596769e-06]
         want = [0.01021529, 0.50000017, 0.18906955]
         got = d3.threed_fk(wristup, False)
-        got_jt = got['jaw_target']
+        got_jt = got['jaw_grasp']
         for i, w in enumerate(want):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
 
@@ -24,7 +24,7 @@ class TestThreedFk(unittest.TestCase):
         general = [ 1.6704086,  -0.72340645,  0.69616856, -1.09520214,  1.59030296, -0.15477658]
         want =  [-0.4574295,   0.83648659,  0.32680155]
         got = d3.threed_fk(general, False)
-        got_jt = got['jaw_target']
+        got_jt = got['jaw_grasp']
         for i, w in enumerate(want):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
         

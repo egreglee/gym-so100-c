@@ -33,7 +33,17 @@ def threed_fk(q, verbose):
     L_elbow, O_elbow =  0.11257, -0.028           # pitch to elbow
     L_wrist_pitch, O_wrist_pitch = 0.1349, 0.0052 # elbow to wrist_pitch
     L_wrist_roll, O_wrist_roll = 0.0601, 0        # wrist_pitch to wrist_roll
-    L_jaw_target, O_jaw_target = 0.10125, 0       # wrist_roll to jaw_target
+    L_jaw_grasp, O_jaw_grasp = 0.10125, 0        # wrist_roll to jaw_grasp
+
+    # body MOVING_JAW relative to body FIXED_JAW
+    jaw_site = [-0.0202, -0.0244, 0]
+
+    # sites marking grasp points of jaw
+    # relative to body MOVING_JAW (joint JAW) 
+    moving_jaw_grasp_site = [-0.0125, -0.0765, 0]
+    # relative to body FIXED_JAW (joint WRIST_ROLL)
+    jaw_grasp_site = [0, -0.10125, 0]
+    fixed_jaw_grasp_site =  [0.0075, -0.10125, 0]
 
     joint = 'base'
     xyz = base
@@ -74,11 +84,18 @@ def threed_fk(q, verbose):
         print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()
 
+    xyz_wrist_roll = xyz.copy()
+    
+    joint = "fixed_jaw_grasp"
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_grasp, 0, O_jaw_grasp]))
+    xyz = xyz_wrist_roll + delta
+    if verbose :
+        print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
+    ret[joint] = xyz.copy()
 
-    joint = "jaw_target"
-    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_target, 0, O_jaw_target]))
-    xyz_prev = xyz.copy()
-    xyz += delta
+    joint = "jaw_grasp"
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_grasp, 0, O_jaw_grasp]))
+    xyz = xyz_wrist_roll + delta
     if verbose :
         print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")
     ret[joint] = xyz.copy()

@@ -113,8 +113,8 @@
                 <joint name="Wrist_Roll" class="Wrist_Roll" />
                 <site name="wrist_roll_site" type="sphere" pos="0 0 0" size="0.01" rgba="1 0 0 1" />
 		<!-- y is - world x; z is world y -->
-                <site name="jaw_target_site" type="sphere" pos="0 -0.10125 0" size="0.001" rgba="1 1 0 1" />
-                <site name="fixed_jaw_site" type="sphere" pos="0.0075 -0.10125 0" size="0.001" rgba="1 0 0 1" />
+                <site name="jaw_grasp_site" type="sphere" pos="0 -0.10125 0" size="0.001" rgba="1 1 0 1" />
+                <site name="fixed_jaw_grasp_site" type="sphere" pos="0.0075 -0.10125 0" size="0.001" rgba="1 0 0 1" />
                 <!--
                 <site name="x-axis_pointer" type="box" pos="0.1 0 0" size="0.1 0.005 0.005" rgba="1 0 0 1" />
                 <site name="y-axis_pointer" type="box" pos="0 0.1 0" size="0.005 0.1 0.005" rgba="0 1 0 1" />
@@ -150,7 +150,7 @@
                   <!-- -0.0745 -0.07475 -.075 -0.0760 || -0.0775 -0.080 -->
 		  <!-- x-axis is opening/closing direction 0.0075 0.0025 0.00 -0.02 -0.015 -->
                   <!--  -0.1 -0.025 | -0.008 -0.010 -0.012 further from centerline -->
-                  <site name="moving_jaw_site" type="sphere" pos="-0.0125 -0.0765 0" size="0.001" rgba="0 1 0 1" />
+                  <site name="moving_jaw_grasp_site" type="sphere" pos="-0.0125 -0.0765 0" size="0.001" rgba="0 1 0 1" />
                   <!--
 		  <site name="x-axis_pointer" type="box" pos="0.1 0 0" size="0.1 0.005 0.005" rgba="1 0 0 1" />
 		  <site name="y-axis_pointer" type="box" pos="0 0.1 0" size="0.005 0.1 0.005" rgba="0 1 0 1" />
