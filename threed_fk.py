@@ -5,6 +5,14 @@ def joint_vec2d(q, L, O):
     (c, s) = np.cos(q), np.sin(q)
     return np.array(((c, -s), (s, c))) @ xz
 
+def rotx(q, xyz):
+    (c, s) = np.cos(q), np.sin(q)
+    rot = np.array([
+        [1, 0, 0],
+        [0, c, -s],
+        [0, s, c]])
+    return rot @ xyz
+
 def roty(q, xyz):
     (c, s) = np.cos(q), np.sin(q)
     rot = np.array([
@@ -35,6 +43,7 @@ def threed_fk(q, verbose):
     L_wrist_roll, O_wrist_roll = 0.0601, 0        # wrist_pitch to wrist_roll
     L_jaw_grasp, O_jaw_grasp = 0.10125, 0        # wrist_roll to jaw_grasp
 
+    # jaw_grasp_site pos = "0 -0.10125 0"
     # body MOVING_JAW relative to body FIXED_JAW
     jaw_site = [-0.0202, -0.0244, 0]
 
@@ -86,8 +95,13 @@ def threed_fk(q, verbose):
 
     xyz_wrist_roll = xyz.copy()
     
+    joint = "jaw"
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-jaw_site[1], jaw_site[2], -jaw_site[0]])))
+    xyz = xyz_wrist_roll + delta
+    ret[joint] = xyz.copy()
+
     joint = "fixed_jaw_grasp"
-    delta = rotz(q[0], roty(q[1] + q[2] + q[3], [L_jaw_grasp, 0, O_jaw_grasp]))
+    delta = rotz(q[0], roty(q[1] + q[2] + q[3], rotx(-q[4], [-fixed_jaw_grasp_site[1], fixed_jaw_grasp_site[2], -fixed_jaw_grasp_site[0]])))
     xyz = xyz_wrist_roll + delta
     if verbose :
         print(f"{joint:11}  {xyz} = {xyz_prev} + {delta}")

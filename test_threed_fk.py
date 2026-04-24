@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import math
 import threed_fk as d3
 
 class TestThreedFk(unittest.TestCase):
@@ -12,7 +13,7 @@ class TestThreedFk(unittest.TestCase):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
 
     def test_wristup(self):
-        wristup = [-6.57574296e-11, -2.27688006e-01, -3.80616735e-07,  1.44596769e-06]
+        wristup = [-6.57574296e-11, -2.27688006e-01, -3.80616735e-07,  1.44596769e-06, 0, 0]
         want = [0.01021529, 0.50000017, 0.18906955]
         got = d3.threed_fk(wristup, False)
         got_jt = got['jaw_grasp']
@@ -28,6 +29,22 @@ class TestThreedFk(unittest.TestCase):
         for i, w in enumerate(want):
             self.assertAlmostEqual(got_jt[i], w, delta=5e-7)
         
+    def test_rotx(self):
+        xyz = np.array([1,2,3])
+        q = np.pi/2
+        want = np.array([1.0, -3.0, 2.0])
+        got = d3.rotx(q, xyz)
+        for i in range(len(got)):
+            self.assertAlmostEqual(got[i], want[i], delta=5e-7)
+
+    def test_rotx_pi4(self):
+        xyz = np.array([1,2,3])
+        q = np.pi/4
+        want = np.array([1, -1/math.sqrt(2), 5/math.sqrt(2)])
+        got = d3.rotx(q, xyz)
+        for i in range(len(got)):
+            self.assertAlmostEqual(got[i], want[i], delta=5e-7)
+
     def test_roty(self):
         xyz = np.array([1,2,3])
         q = np.pi/2
